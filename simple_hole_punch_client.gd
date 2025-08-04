@@ -23,7 +23,7 @@ var peers: Array = []
 var peer_names: Array = []
 var client = PacketPeerUDP.new()
 var bigrams: Array = ['cy','ah','jc','du','mw','wh','rv','yq','yy','sr','ss','tg','cv','gx','ia','ba','wa','bx','sm','co','ms','ea','to','rb','xr','vx','ua','fw','ri','ds','ji','bk','bb','sp','cc','gc','bu','ow','de','io','gm','hs','kq','as','fa','dx','wf','hy','pg','ug','db','jv','wq','ir','lm','lt','hm','on','iz','is','fx','my','ph','fd','vl','zw','sv','si','dp','jp','oa','cm','ws','jm','do','ot','gd','lr','ko','se','qn','rz','xh','mz','sn','af','wo','rf','je','nj','yn','tq','zu','xp','xv','nk','wr','tk','dq','ga','tz','bl','or','ui','dt','eo','ld','hr','uv','sw','gg','hd','bs','nx','jz','au','oj','tu','br','rc','vz','tw','nb','ay','dv','tb','kc','qu','qm','mi','it','va','sa','di','be','wy','gh','ki','sl','pq','ed','iv','er','yi','iq','ls','ur','kv','ln','hh','vj','en','im','vm','hi','bm','we','fz','xb','ne','ag','hc','ma','gt','yx','pl','cr','oh','gj','wx','gq','ti','fi','hf','xm','km','ul','lv','nh','kr','ef','ly','us','ge','ju','fs','qz','fn','np','cj','vn','ft','wz','jr','tf','ww','ab','za','og','lq','mm','xw','uk','so','mb','rp','zt','xc','ad','hg','gw','pu','kx','cf','yb','gs','gr','kb','oq','xq','dn','tv','rl','vo','xz','jk','yg','qy','fr','nl','ii','yc','dz','wu','od','ng','pd','fg','fj','fh','in','na','rt','hz','es','wt','he','gi','oo','bc','cw','yv','ky','pz','wm','wi']
-var steps: Dictionary = {"HR": _host_registered, "JR": _join_registered, "BK": _bad_key, "NJ": _new_joiner, "RD": _peer_ready, "JH": _join_host, "JD": _join_done}
+var packet_handlers: Dictionary = {"HR": _host_registered, "JR": _join_registered, "BK": _bad_key, "NJ": _new_joiner, "RD": _peer_ready, "JH": _join_host, "JD": _join_done}
 var timer: Timer = Timer.new()
 var refresh_timer = 1
 
@@ -91,7 +91,7 @@ func _process(_delta: float) -> void:
 	if client.get_available_packet_count() <= 0: return
 	var packet_string = client.get_packet().get_string_from_ascii()
 	var packet_key = _addr_to_key(client.get_packet_ip(), client.get_packet_port())
-	if packet_string.left(2) in steps: steps[packet_string.left(2)].call(packet_key, packet_string.right(-3))
+	if packet_string.left(2) in packet_handlers: packet_handlers[packet_string.left(2)].call(packet_key, packet_string.right(-3))
 
 # Push a packet to a specific key.
 func _send_packet(packet_key: String, packet_string: String):
