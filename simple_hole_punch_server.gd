@@ -56,7 +56,7 @@ func _join_session(packet_key: String, packet_string: String) -> void:
 	var packet_parts = packet_string.split(":")
 	var local_key = packet_parts[0]
 	var session_id = packet_parts[1]
-	if session_id in hosts and hosts[session_id].random == "": 
+	if session_id in hosts and hosts[session_id].random in ["", packet_key]: 
 		_send_packet(hosts[session_id].remote_key, "NJ:"+packet_key+":"+local_key)
 		_send_packet(packet_key, "JR:"+packet_key+":"+hosts[session_id].remote_key+":"+hosts[session_id].local_key)
 	else: _send_packet(packet_key, "BK:"+session_id)
