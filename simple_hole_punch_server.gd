@@ -1,4 +1,4 @@
-class_name DVServer
+class_name SimpleHolePunchServer
 extends Node
 
 enum state {REGISTERED, HOSTING, JOINED}
