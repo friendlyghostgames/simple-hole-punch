@@ -1,4 +1,4 @@
-class_name SimpleHolePunchClient
+class_name SimpleHolePunchServer
 extends Node
 
 signal start_server(port: int) # Matches complete - time to start MultiplayerPeer server
@@ -17,7 +17,7 @@ var session_id: String = ""
 var remote_key: String = ""
 var local_key: String = ""
 var local_ip: String = ""
-var local_port: int = 30000+randi_range(0,9999)
+var local_port: int = 30000+randi_range(0,3697)
 var server_key: String = ""
 var peers: Array = []
 var peer_names: Array = []
@@ -48,9 +48,10 @@ func join_session(id: String, alias: String) -> void:
 	server_key = id.left(-4)
 	client.close()
 	var err = client.bind(local_port)
-	if err == OK: _send_packet(server_key, "JS:"+local_key+":"+session_id)
-	else: push_error("join_session failed to bind to local_port "+str(local_port)+" : "+str(err))
-	current_state = state.JOIN
+	if err != OK: push_error("join_session failed to bind to local_port "+str(local_port)+" : "+str(err))
+	else: err = _send_packet(server_key, "JS:"+local_key+":"+session_id)
+	if err == OK: current_state = state.JOIN
+	else: bad_server.emit(server_key)
 
 # RS # Ask the matching server to join or host a random session.
 func random_session(serv_key: String, alias: String) -> void:
@@ -59,9 +60,10 @@ func random_session(serv_key: String, alias: String) -> void:
 	is_random = true
 	client.close()
 	var err = client.bind(local_port)
-	if err == OK: _send_packet(server_key, "RS:"+local_key)
-	else: push_error("random_session failed to bind to local_port "+str(local_port)+" : "+str(err))
-	current_state = state.RANDOM
+	if err != OK: push_error("random_session failed to bind to local_port "+str(local_port)+" : "+str(err))
+	else: err = _send_packet(server_key, "RS:"+local_key)
+	if err == OK: current_state = state.RANDOM
+	else: bad_server.emit(server_key)
 
 # CS # Complete a session you are hosting with the currently connected peers.
 func close_session() -> void:
