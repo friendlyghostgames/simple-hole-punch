@@ -1,4 +1,4 @@
-class_name SimpleHolePunchServer
+class_name SimpleHolePunchClient
 extends Node
 
 signal start_server(port: int) # Matches complete - time to start MultiplayerPeer server
