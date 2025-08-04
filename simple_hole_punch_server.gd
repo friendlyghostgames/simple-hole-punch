@@ -1,4 +1,4 @@
-class_name SimpleHolePunchServer
+class_name DVServer
 extends Node
 
 enum state {REGISTERED, HOSTING, JOINED}
@@ -48,7 +48,7 @@ func _host_session(packet_key: String, packet_string: String) -> void:
 	var host_id = _session_id()
 	for host in hosts: if packet_key == hosts[host].remote_key: host_id = host
 	if not host_id in hosts: _push_log("STARTED", host_id)
-	hosts[host_id] = {"remote_key": packet_key, "local_key": packet_string, "added": Time.get_ticks_msec()}
+	hosts[host_id] = {"remote_key": packet_key, "local_key": packet_string, "random": "", "added": Time.get_ticks_msec()}
 	_send_packet(packet_key, "HR:"+packet_key+":"+host_id)
 
 # Join a registered host and recieve their remote key and local key.
@@ -56,7 +56,7 @@ func _join_session(packet_key: String, packet_string: String) -> void:
 	var packet_parts = packet_string.split(":")
 	var local_key = packet_parts[0]
 	var session_id = packet_parts[1]
-	if session_id in hosts: 
+	if session_id in hosts and hosts[session_id].random == "": 
 		_send_packet(hosts[session_id].remote_key, "NJ:"+packet_key+":"+local_key)
 		_send_packet(packet_key, "JR:"+packet_key+":"+hosts[session_id].remote_key+":"+hosts[session_id].local_key)
 	else: _send_packet(packet_key, "BK:"+session_id)
