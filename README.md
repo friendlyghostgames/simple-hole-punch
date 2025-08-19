@@ -39,11 +39,11 @@ B=>A    [JD]    _join_done      The client is trying to connect directly. When a
 
 CLIENT API
 
-**host_session**       Register with the matchmaking server as a host.  
-**join_session**       Register with the matchmaking server to join a specific session.
-**random_session**     Register with the matchmaking server to either host or join a random session.
-**close_session**      The host is closing the session. Clean up their details from the list of sessions.
-**get_host**           Retreive the host details to attempt reconnection.
+**host_session(serv_key: String, alias: String)**    Register with the matchmaking server as a host.  
+**join_session(id: String, alias: String)**    Register with the matchmaking server to join a specific session.
+**random_session(serv_key: String, alias: String)**    Register with the matchmaking server to either host or join a random session.
+**close_session()**      The host is closing the session. Clean up their details from the list of sessions.
+**get_host()**           Retreive the host details to attempt reconnection.
 
 SIGNALS
 
