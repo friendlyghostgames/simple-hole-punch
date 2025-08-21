@@ -56,4 +56,9 @@ signal bad_session(key: String)                    The session ID does not exist
 signal bad_server(key: String)                     The matchmaking server is unresponsive
 signal start_random()                              Client matched in a random pair
 
+USAGE
+
+Host: Start your MultiplayerPeer host when you receive the start_server signal. Re-use the exact same port you used for holepunching (the port argument given by the signal)
+
+Clients: Start your MultiplayerPeer client when you receive the start_client signal. Connect to the host and port given by the signal, and specify the local_port too using the local_port given.
 ```
