@@ -58,7 +58,11 @@ signal start_random()                              Client matched in a random pa
 
 USAGE
 
-Host: Start your MultiplayerPeer host when you receive the start_server signal. Re-use the exact same port you used for holepunching (the port argument given by the signal)
+Host:
 
-Clients: Start your MultiplayerPeer client when you receive the start_client signal. Connect to the host and port given by the signal, and specify the local_port too using the local_port given.
+Start your MultiplayerPeer host when you receive the start_server signal.
+Re-use the exact same port you used for holepunching (the port argument given by the signal)
+
+Clients: Start your MultiplayerPeer client when you receive the start_client signal.
+Connect to the host and port given by the signal, and specify the local_port too using the local_port given in the signal.
 ```
